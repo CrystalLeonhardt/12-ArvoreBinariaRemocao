@@ -246,38 +246,69 @@ void removerElementoArvore(NO* no, int valor) {
 		return;
 	}
 
-
 	// caso 1: sem filhos	
-	
+	if (atual->esq == NULL && atual->dir == NULL) {
+		if (pai->esq == atual) {
+			pai->esq = NULL;
+		}
+		else {
+			pai->dir = NULL;
+		}
+		free(atual);
+		return;
+	}
 
 	// caso 2: um filho	
-	
+	else if ((atual->esq == NULL && atual->dir != NULL) || (atual->esq != NULL && atual->dir == NULL)) {
+		if (atual->esq != NULL) {
+			if (pai->esq == atual) {
+				pai->esq = atual->esq;
+			}
+			else {
+				pai->dir = atual->esq;
+			}
+		
+		}
+		else {
+			if (pai->esq == atual) {
+				pai->esq = atual->dir;
+			}
+			else {
+				pai->dir = atual->dir;
+			}
+		}
+		free(atual);
+		return;
+	}
 
 	// caso 3: dois filhos
-
-	// procura o elmento mais a esquerda da sub-arvore da direita
-	NO* sucessor = atual->dir;
-	NO* paiSucessor = atual;
-	while (sucessor->esq != NULL) {
-		paiSucessor = sucessor;
-		sucessor = sucessor->esq;
-	}
-
-	// copia o valor do sucessor para o no atual
-	atual->valor = sucessor->valor;
-
-	// se existir uma sub-arvore a direita do sucessor , entao
-	// ela deve ser ligada ao pai do sucessor
-	if (sucessor->dir != NULL)
-	{
-		paiSucessor->esq = sucessor->dir;
-	}
 	else {
-		paiSucessor->esq = NULL;
-	}
+		// procura o elmento mais a esquerda da sub-arvore da direita
+		NO* sucessor = atual->dir;
+		NO* paiSucessor = atual;
+		while (sucessor->esq != NULL) {
+			paiSucessor = sucessor;
+			sucessor = sucessor->esq;
+		}
 
-	//libera memoria
-	free(sucessor);
+		// copia o valor do sucessor para o no atual
+		atual->valor = sucessor->valor;
+
+		// se existir uma sub-arvore a direita do sucessor , entao
+		// ela deve ser ligada ao pai do sucessor
+		if (sucessor->dir != NULL)
+		{
+			paiSucessor->esq = sucessor->dir;
+		}
+		else {
+			paiSucessor->esq = NULL;
+		}
+
+		//libera memoria
+		free(sucessor);
+		return;
+	}
+	
 
 
 }
