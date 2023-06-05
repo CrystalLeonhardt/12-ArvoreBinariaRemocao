@@ -248,11 +248,16 @@ void removerElementoArvore(NO* no, int valor) {
 
 	// caso 1: sem filhos	
 	if (atual->esq == NULL && atual->dir == NULL) {
-		if (pai->esq == atual) {
-			pai->esq = NULL;
+		if (pai != NULL) {
+			if (pai->esq == atual) {
+				pai->esq = NULL;
+			}
+			else {
+				pai->dir = NULL;
+			}
 		}
 		else {
-			pai->dir = NULL;
+			raiz = NULL;
 		}
 		free(atual);
 		return;
@@ -260,30 +265,41 @@ void removerElementoArvore(NO* no, int valor) {
 
 	// caso 2: um filho	
 	else if ((atual->esq == NULL && atual->dir != NULL) || (atual->esq != NULL && atual->dir == NULL)) {
-		if (atual->esq != NULL) {
-			if (pai->esq == atual) {
-				pai->esq = atual->esq;
+		if (pai != NULL) {
+			if (atual->esq != NULL) {
+				if (pai->esq == atual) {
+					pai->esq = atual->esq;
+				}
+				else {
+					pai->dir = atual->esq;
+				}
+
 			}
 			else {
-				pai->dir = atual->esq;
+				if (pai->esq == atual) {
+					pai->esq = atual->dir;
+				}
+				else {
+					pai->dir = atual->dir;
+				}
 			}
-		
 		}
 		else {
-			if (pai->esq == atual) {
-				pai->esq = atual->dir;
+			if (atual->esq != NULL) {
+				raiz = atual->esq;
 			}
 			else {
-				pai->dir = atual->dir;
+				raiz = atual->dir;
 			}
 		}
+		
 		free(atual);
 		return;
 	}
 
 	// caso 3: dois filhos
 	else {
-		// procura o elmento mais a esquerda da sub-arvore da direita
+		// procura o elemento mais a esquerda da sub-arvore da direita
 		NO* sucessor = atual->dir;
 		NO* paiSucessor = atual;
 		while (sucessor->esq != NULL) {
